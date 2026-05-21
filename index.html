@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luis — AI Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #F8F6F1;
+    --ink: #1A1814;
+    --ink-muted: #6B6760;
+    --ink-faint: #B8B5AF;
+    --accent: #2A5BFF;
+    --accent-dim: #E8EDFF;
+    --border: rgba(26,24,20,0.1);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --genie-purple: #7C3AED;
+    --genie-gold: #F59E0B;
+    --genie-teal: #06B6D4;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(248,246,241,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo { font-family: var(--serif); font-size: 1.2rem; color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 3rem 4rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; top: 0; right: 0; width: 55%; height: 100%; background: linear-gradient(135deg, #E8EDFF 0%, #EDF5FF 60%, var(--cream) 100%); z-index: 0; clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%); }
+  .hero-content { position: relative; z-index: 1; max-width: 680px; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 500; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; padding: 0.4rem 0.9rem; border: 0.5px solid rgba(42,91,255,0.25); border-radius: 100px; background: rgba(42,91,255,0.06); }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+  .hero h1 { font-family: var(--serif); font-size: clamp(3rem,6vw,5.5rem); line-height: 1.05; margin-bottom: 0.3em; }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 1.1rem; color: var(--ink-muted); max-width: 480px; margin: 1.5rem 0 2.5rem; line-height: 1.75; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { padding: 0.85rem 2rem; background: var(--ink); color: var(--cream); border: none; border-radius: 4px; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .btn-primary:hover { background: #333; transform: translateY(-1px); }
+  .btn-outline { padding: 0.85rem 2rem; background: transparent; color: var(--ink); border: 0.5px solid var(--ink); border-radius: 4px; font-family: var(--sans); font-size: 0.9rem; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .btn-outline:hover { background: rgba(26,24,20,0.05); transform: translateY(-1px); }
+  .scroll-hint { position: absolute; bottom: 2.5rem; left: 3rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.75rem; color: var(--ink-faint); letter-spacing: 0.05em; text-transform: uppercase; z-index: 1; }
+  .scroll-line { width: 40px; height: 0.5px; background: var(--ink-faint); }
+
+  /* SECTIONS */
+  section { padding: 6rem 3rem; }
+  .section-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
+  .section-title { font-family: var(--serif); font-size: clamp(2rem,3.5vw,3rem); line-height: 1.1; margin-bottom: 3rem; }
+
+  /* ABOUT */
+  .about { background: white; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; max-width: 1000px; }
+  .about-text { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; }
+  .about-text p+p { margin-top: 1.25rem; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .stat-card { padding: 1.5rem; border: 0.5px solid var(--border); border-radius: 8px; }
+  .stat-num { font-family: var(--serif); font-size: 2.5rem; color: var(--ink); line-height: 1; margin-bottom: 0.35rem; }
+  .stat-label { font-size: 0.82rem; color: var(--ink-muted); line-height: 1.4; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 1.25rem; max-width: 1000px; }
+  .skill-card { padding: 1.75rem 1.5rem; border: 0.5px solid var(--border); border-radius: 8px; background: white; transition: border-color 0.2s, transform 0.2s; }
+  .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .skill-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+  .skill-name { font-weight: 500; font-size: 1rem; margin-bottom: 0.5rem; }
+  .skill-desc { font-size: 0.85rem; color: var(--ink-muted); }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+  .tag { font-size: 0.72rem; padding: 0.25rem 0.65rem; background: var(--accent-dim); color: var(--accent); border-radius: 100px; font-weight: 500; }
+
+  /* PROJECTS */
+  .projects { background: white; }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; max-width: 1000px; }
+  .project-card { border: 0.5px solid var(--border); border-radius: 8px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(26,24,20,0.08); }
+  .project-thumb { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+  .thumb-1 { background: linear-gradient(135deg,#E8EDFF,#C5D0FF); }
+  .thumb-2 { background: linear-gradient(135deg,#E1F5EE,#9FE1CB); }
+  .thumb-3 { background: linear-gradient(135deg,#FAEEDA,#FAC775); }
+  .project-info { padding: 1.5rem; }
+  .project-cat { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  .project-name { font-family: var(--serif); font-size: 1.3rem; line-height: 1.2; margin-bottom: 0.6rem; }
+  .project-desc { font-size: 0.88rem; color: var(--ink-muted); }
+
+  /* CONTACT */
+  .contact-inner { max-width: 560px; }
+  .contact-intro { font-size: 1.05rem; color: var(--ink-muted); margin-bottom: 2.5rem; line-height: 1.8; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border: 0.5px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--ink); background: white; transition: border-color 0.2s, transform 0.15s; }
+  .contact-link:hover { border-color: var(--accent); transform: translateX(4px); }
+  .cl-left { display: flex; align-items: center; gap: 1rem; }
+  .cl-label { font-weight: 500; font-size: 0.95rem; }
+  .cl-sub { font-size: 0.82rem; color: var(--ink-muted); }
+  .cl-arrow { color: var(--ink-faint); }
+
+  footer { padding: 2rem 3rem; border-top: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: var(--ink-faint); }
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  /* ===================== GENIE CHATBOT ===================== */
+  #genie-btn {
+    position: fixed; bottom: 2rem; right: 2rem;
+    width: 64px; height: 64px;
+    border: none; background: none; cursor: pointer; z-index: 999;
+    filter: drop-shadow(0 4px 16px rgba(124,58,237,0.4));
+    transition: transform 0.3s;
+  }
+  #genie-btn:hover { transform: scale(1.1) rotate(-5deg); }
+  #genie-btn svg { width: 64px; height: 64px; }
+  .bottle-glow { animation: bottleFloat 3s ease-in-out infinite; }
+  @keyframes bottleFloat { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-6px); } }
+
+  .smoke-container { position: fixed; bottom: 5rem; right: 3.5rem; z-index: 998; pointer-events: none; }
+  .smoke { position: absolute; border-radius: 50%; opacity: 0; animation: smokeRise 1.5s ease-out forwards; }
+  @keyframes smokeRise { 0% { opacity: 0.7; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-120px) scale(3); } }
+
+  #chat-window {
+    position: fixed; bottom: 6rem; right: 2rem;
+    width: 360px; height: 500px;
+    background: white; border-radius: 20px;
+    border: 1px solid rgba(124,58,237,0.2);
+    box-shadow: 0 24px 60px rgba(124,58,237,0.18), 0 4px 16px rgba(0,0,0,0.08);
+    display: flex; flex-direction: column; overflow: hidden;
+    z-index: 1000; transform-origin: bottom right;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+    transform: scale(0) translateY(20px); opacity: 0; pointer-events: none;
+  }
+  #chat-window.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+
+  .chat-header {
+    background: linear-gradient(135deg, #4C1D95, #7C3AED, #06B6D4);
+    padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;
+    position: relative; overflow: hidden;
+  }
+  .chat-header::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse, rgba(245,158,11,0.15) 0%, transparent 60%);
+    animation: shimmer 4s linear infinite;
+  }
+  @keyframes shimmer { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+  .genie-avatar { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(245,158,11,0.6); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; position: relative; z-index: 1; }
+  .chat-header-info { position: relative; z-index: 1; flex: 1; }
+  .chat-header-name { font-weight: 500; font-size: 0.95rem; color: white; }
+  .chat-header-sub { font-size: 0.75rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 4px; }
+  .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ADE80; animation: pulse 2s infinite; }
+  .chat-close { background: rgba(255,255,255,0.15); border: none; border-radius: 50%; width: 30px; height: 30px; color: white; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; transition: background 0.2s; }
+  .chat-close:hover { background: rgba(255,255,255,0.25); }
+
+  .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; background: #FAFAFA; }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: #DDD; border-radius: 4px; }
+  .msg { display: flex; gap: 0.5rem; align-items: flex-end; max-width: 88%; }
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.bot { align-self: flex-start; }
+  .msg-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #7C3AED, #06B6D4); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+  .msg-bubble { padding: 0.65rem 0.9rem; border-radius: 16px; font-size: 0.88rem; line-height: 1.5; }
+  .msg.bot .msg-bubble { background: white; color: var(--ink); border: 0.5px solid rgba(124,58,237,0.15); border-bottom-left-radius: 4px; }
+  .msg.user .msg-bubble { background: linear-gradient(135deg, #7C3AED, #5B21B6); color: white; border-bottom-right-radius: 4px; }
+
+  .typing-bubble { display: flex; gap: 4px; padding: 0.75rem 1rem; }
+  .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: #7C3AED; opacity: 0.4; animation: typingBounce 1.2s ease-in-out infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
+
+  .quick-suggestions { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.5rem 1rem; background: #FAFAFA; border-top: 0.5px solid rgba(124,58,237,0.1); }
+  .quick-btn { font-size: 0.75rem; padding: 0.3rem 0.7rem; border: 0.5px solid rgba(124,58,237,0.3); border-radius: 100px; background: white; color: #7C3AED; cursor: pointer; transition: background 0.2s, transform 0.1s; font-family: var(--sans); }
+  .quick-btn:hover { background: rgba(124,58,237,0.08); transform: translateY(-1px); }
+
+  .chat-input-area { padding: 0.75rem 1rem; border-top: 0.5px solid rgba(124,58,237,0.1); display: flex; gap: 0.5rem; background: white; align-items: flex-end; }
+  #chat-input { flex: 1; border: 0.5px solid rgba(124,58,237,0.2); border-radius: 12px; padding: 0.6rem 0.85rem; font-family: var(--sans); font-size: 0.88rem; color: var(--ink); background: #FAFAFA; resize: none; outline: none; max-height: 80px; transition: border-color 0.2s; }
+  #chat-input:focus { border-color: #7C3AED; }
+  #chat-send { width: 38px; height: 38px; border: none; border-radius: 50%; background: linear-gradient(135deg, #7C3AED, #5B21B6); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; transition: transform 0.15s, opacity 0.2s; }
+  #chat-send:hover { transform: scale(1.08); }
+  #chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .sparkle { position: fixed; pointer-events: none; z-index: 9999; font-size: 1.2rem; animation: sparkleFly 0.8s ease-out forwards; }
+  @keyframes sparkleFly { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(0.3); } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">Luis.</a>
+  <ul class="nav-links">
+    <li><a href="#about">Tentang</a></li>
+    <li><a href="#skills">Keahlian</a></li>
+    <li><a href="#projects">Proyek</a></li>
+    <li><a href="#contact">Kontak</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Tersedia untuk proyek baru</div>
+    <h1>Halo, saya<br><em>Luis</em></h1>
+    <p class="hero-sub">AI Engineer yang membangun sistem cerdas — dari model machine learning hingga solusi AI yang siap produksi.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">Lihat Portofolio</a>
+      <a href="#contact" class="btn-outline">Hubungi Saya</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<section class="about" id="about">
+  <div class="fade-in">
+    <p class="section-label">Perkenalan</p>
+    <h2 class="section-title">Tentang Saya</h2>
+  </div>
+  <div class="about-grid fade-in">
+    <div class="about-text">
+      <p>Saya Luis Pratama, seorang AI Engineer berusia 27 tahun asal Jakarta. Dengan latar belakang Informatika dari Universitas Indonesia, saya telah menghabiskan 4 tahun terakhir membangun sistem kecerdasan buatan yang berdampak nyata di berbagai industri.</p>
+      <p>Saya percaya bahwa AI terbaik adalah AI yang tidak terasa seperti AI — seamless, intuitif, dan benar-benar membantu. Filosofi ini selalu saya bawa dalam setiap baris kode yang saya tulis.</p>
+      <p>Di luar koding, saya gemar membaca paper riset AI terbaru, berkontribusi ke open-source, main basket, dan sesekali menulis di Medium tentang perkembangan dunia AI.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card"><div class="stat-num">4+</div><div class="stat-label">Tahun pengalaman di bidang AI & ML</div></div>
+      <div class="stat-card"><div class="stat-num">20+</div><div class="stat-label">Proyek AI yang berhasil diselesaikan</div></div>
+      <div class="stat-card"><div class="stat-num">12+</div><div class="stat-label">Model yang di-deploy ke production</div></div>
+      <div class="stat-card"><div class="stat-num">8+</div><div class="stat-label">Klien & kolaborator aktif</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="fade-in"><p class="section-label">Kemampuan</p><h2 class="section-title">Keahlian Teknis</h2></div>
+  <div class="skills-grid">
+    <div class="skill-card fade-in"><div class="skill-icon">🧠</div><div class="skill-name">Machine Learning</div><div class="skill-desc">Membangun dan melatih model ML dari data mentah hingga siap produksi.</div><div class="skill-tags"><span class="tag">PyTorch</span><span class="tag">TensorFlow</span><span class="tag">Scikit-learn</span></div></div>
+    <div class="skill-card fade-in"><div class="skill-icon">💬</div><div class="skill-name">LLM & Generative AI</div><div class="skill-desc">Fine-tuning, RAG, dan integrasi LLM untuk aplikasi nyata.</div><div class="skill-tags"><span class="tag">LangChain</span><span class="tag">OpenAI API</span><span class="tag">Hugging Face</span></div></div>
+    <div class="skill-card fade-in"><div class="skill-icon">⚙️</div><div class="skill-name">MLOps & Deployment</div><div class="skill-desc">Memastikan model berjalan mulus di lingkungan cloud dan edge.</div><div class="skill-tags"><span class="tag">Docker</span><span class="tag">FastAPI</span><span class="tag">AWS</span></div></div>
+    <div class="skill-card fade-in"><div class="skill-icon">📊</div><div class="skill-name">Data Engineering</div><div class="skill-desc">Pipeline data yang handal untuk mendukung ekosistem AI.</div><div class="skill-tags"><span class="tag">Python</span><span class="tag">Spark</span><span class="tag">PostgreSQL</span></div></div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="fade-in"><p class="section-label">Karya</p><h2 class="section-title">Proyek Unggulan</h2></div>
+  <div class="projects-grid">
+    <div class="project-card fade-in"><div class="project-thumb thumb-1">🤖</div><div class="project-info"><div class="project-cat">Generative AI</div><div class="project-name">Chatbot Layanan Pelanggan</div><div class="project-desc">Asisten AI berbasis LLM yang menangani ribuan pertanyaan pelanggan per hari dengan akurasi tinggi.</div></div></div>
+    <div class="project-card fade-in"><div class="project-thumb thumb-2">📈</div><div class="project-info"><div class="project-cat">Predictive Analytics</div><div class="project-name">Sistem Prediksi Churn</div><div class="project-desc">Model ML untuk memprediksi pelanggan yang berisiko berhenti berlangganan dengan akurasi 92%.</div></div></div>
+    <div class="project-card fade-in"><div class="project-thumb thumb-3">👁️</div><div class="project-info"><div class="project-cat">Computer Vision</div><div class="project-name">Deteksi Kualitas Produk</div><div class="project-desc">Sistem inspeksi visual otomatis untuk lini produksi manufaktur menggunakan deep learning.</div></div></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="fade-in"><p class="section-label">Kontak</p><h2 class="section-title">Mari Berkolaborasi</h2></div>
+  <div class="contact-inner fade-in">
+    <p class="contact-intro">Sedang mencari AI Engineer untuk proyek Anda? Saya terbuka untuk diskusi, kolaborasi, atau sekadar ngobrol tentang AI.</p>
+    <div class="contact-links">
+      <a href="mailto:luis.pratama@gmail.com" class="contact-link"><div class="cl-left"><span style="font-size:1.25rem">✉️</span><div><div class="cl-label">Email</div><div class="cl-sub">luis.pratama@gmail.com</div></div></div><span class="cl-arrow">→</span></a>
+      <a href="https://linkedin.com/in/luispratama" class="contact-link" target="_blank"><div class="cl-left"><span style="font-size:1.25rem">💼</span><div><div class="cl-label">LinkedIn</div><div class="cl-sub">linkedin.com/in/luispratama</div></div></div><span class="cl-arrow">→</span></a>
+      <a href="https://github.com/luispratama" class="contact-link" target="_blank"><div class="cl-left"><span style="font-size:1.25rem">🐙</span><div><div class="cl-label">GitHub</div><div class="cl-sub">github.com/luispratama</div></div></div><span class="cl-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Luis Pratama — AI Engineer</span>
+  <span>Jakarta, Indonesia</span>
+</footer>
+
+<!-- GENIE BOTTLE BUTTON -->
+<button id="genie-btn" title="Tanya tentang Luis!" aria-label="Buka chatbot">
+  <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="bottle-glow">
+    <ellipse cx="32" cy="10" rx="4" ry="3" fill="#C084FC" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="3;6;3" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="10;2;10" dur="2s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="28" cy="7" rx="2.5" ry="2" fill="#818CF8" opacity="0.4">
+      <animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="7;0;7" dur="2.5s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="36" cy="8" rx="2" ry="1.5" fill="#F472B6" opacity="0.35">
+      <animate attributeName="opacity" values="0.35;0;0.35" dur="1.8s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="8;1;8" dur="1.8s" repeatCount="indefinite"/>
+    </ellipse>
+    <rect x="27" y="14" width="10" height="8" rx="2" fill="#A78BFA"/>
+    <rect x="29" y="12" width="6" height="4" rx="1.5" fill="#F59E0B"/>
+    <ellipse cx="32" cy="52" rx="18" ry="22" fill="url(#bottleGrad)"/>
+    <ellipse cx="25" cy="42" rx="4" ry="8" fill="rgba(255,255,255,0.25)" transform="rotate(-15 25 42)"/>
+    <ellipse cx="32" cy="54" rx="10" ry="12" fill="url(#glowGrad)" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="1.5s" repeatCount="indefinite"/>
+    </ellipse>
+    <text x="26" y="52" font-size="8" opacity="0.8">✨</text>
+    <text x="32" y="62" font-size="6" opacity="0.7">⭐</text>
+    <defs>
+      <radialGradient id="bottleGrad" cx="40%" cy="35%">
+        <stop offset="0%" stop-color="#A78BFA"/>
+        <stop offset="50%" stop-color="#7C3AED"/>
+        <stop offset="100%" stop-color="#4C1D95"/>
+      </radialGradient>
+      <radialGradient id="glowGrad" cx="50%" cy="50%">
+        <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+  </svg>
+</button>
+
+<div class="smoke-container" id="smoke-container"></div>
+
+<!-- CHAT WINDOW -->
+<div id="chat-window">
+  <div class="chat-header">
+    <div class="genie-avatar">🧞</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">Zara — Asisten Luis</div>
+      <div class="chat-header-sub"><div class="online-dot"></div> Selalu siap membantu</div>
+    </div>
+    <button class="chat-close" id="chat-close" aria-label="Tutup chat">✕</button>
+  </div>
+
+  <div class="chat-messages" id="chat-messages">
+    <div class="msg bot">
+      <div class="msg-avatar">🧞</div>
+      <div class="msg-bubble">
+        ✨ Halo! Saya <strong>Zara</strong>, asisten ajaib Luis! Saya tahu segalanya tentang dia — pengalaman, proyek, skill, dan mimpi-mimpinya. Tanya apa saja! 🔮
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-suggestions" id="quick-suggestions">
+    <button class="quick-btn" onclick="sendQuick('Apa pengalaman kerja Luis?')">💼 Pengalaman</button>
+    <button class="quick-btn" onclick="sendQuick('Apa skill utama Luis?')">⚡ Skill</button>
+    <button class="quick-btn" onclick="sendQuick('Ceritakan proyek terbaik Luis')">🚀 Proyek</button>
+    <button class="quick-btn" onclick="sendQuick('Bagaimana cara menghubungi Luis?')">📩 Kontak</button>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea id="chat-input" placeholder="Tanya tentang Luis..." rows="1"></textarea>
+    <button id="chat-send" onclick="sendMessage()" aria-label="Kirim">➤</button>
+  </div>
+</div>
+
+<script>
+let isOpen = false;
+let isTyping = false;
+let conversationHistory = [];
+
+document.getElementById('genie-btn').addEventListener('click', () => {
+  if (!isOpen) openChat(); else closeChat();
+});
+document.getElementById('chat-close').addEventListener('click', closeChat);
+
+function openChat() {
+  isOpen = true;
+  spawnSmoke();
+  setTimeout(() => {
+    document.getElementById('chat-window').classList.add('open');
+    document.getElementById('chat-input').focus();
+    spawnSparkles();
+  }, 300);
+}
+
+function closeChat() {
+  isOpen = false;
+  document.getElementById('chat-window').classList.remove('open');
+}
+
+function spawnSmoke() {
+  const container = document.getElementById('smoke-container');
+  const colors = ['#C084FC','#818CF8','#F472B6','#34D399','#60A5FA'];
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => {
+      const s = document.createElement('div');
+      s.className = 'smoke';
+      const size = 20 + Math.random() * 30;
+      s.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${-15+Math.random()*30}px;bottom:${Math.random()*20}px;opacity:0;animation:smokeRise ${0.8+Math.random()*0.7}s ease-out forwards;animation-delay:${Math.random()*0.3}s;`;
+      container.appendChild(s);
+      setTimeout(() => s.remove(), 2000);
+    }, i * 80);
+  }
+}
+
+function spawnSparkles() {
+  const sparks = ['✨','⭐','🌟','💫','🔮'];
+  const btn = document.getElementById('genie-btn');
+  const rect = btn.getBoundingClientRect();
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.textContent = sparks[Math.floor(Math.random()*sparks.length)];
+      s.style.cssText = `left:${rect.left+Math.random()*rect.width}px;top:${rect.top+Math.random()*rect.height}px;`;
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 800);
+    }, i * 100);
+  }
+}
+
+function sendQuick(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+document.getElementById('chat-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || isTyping) return;
+
+  input.value = '';
+  appendMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  document.getElementById('quick-suggestions').style.display = 'none';
+
+  showTyping();
+  document.getElementById('chat-send').disabled = true;
+  isTyping = true;
+
+  try {
+    // Panggil backend Vercel — API key aman di server!
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conversationHistory })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.error || 'Server error');
+
+    hideTyping();
+    appendMessage('bot', data.reply);
+    conversationHistory.push({ role: 'assistant', content: data.reply });
+
+  } catch (err) {
+    hideTyping();
+    appendMessage('bot', '🔮 Hmm, ada gangguan ajaib. Coba lagi sebentar ya! ✨');
+    console.error(err);
+  }
+
+  isTyping = false;
+  document.getElementById('chat-send').disabled = false;
+  document.getElementById('chat-input').focus();
+}
+
+function appendMessage(role, text) {
+  const messages = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  if (role === 'bot') {
+    div.innerHTML = `<div class="msg-avatar">🧞</div><div class="msg-bubble">${formatText(text)}</div>`;
+  } else {
+    div.innerHTML = `<div class="msg-bubble">${escapeHtml(text)}</div>`;
+  }
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function formatText(text) {
+  return escapeHtml(text)
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+let typingEl = null;
+function showTyping() {
+  const messages = document.getElementById('chat-messages');
+  typingEl = document.createElement('div');
+  typingEl.className = 'msg bot';
+  typingEl.id = 'typing-indicator';
+  typingEl.innerHTML = `<div class="msg-avatar">🧞</div><div class="msg-bubble" style="padding:0.5rem 0.9rem;"><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  messages.appendChild(typingEl);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
