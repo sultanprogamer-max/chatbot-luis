@@ -1,0 +1,9 @@
+{
+  "name": "sultan-portfolio",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "google-spreadsheet": "^4.1.4",
+    "google-auth-library": "^9.6.3"
+  }
+}

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sultan Abdillah — AI & Automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A0F;
+  --bg2:#111118;
+  --bg3:#1A1A24;
+  --surface:#1E1E2C;
+  --border:#ffffff0f;
+  --border2:#ffffff1a;
+  --text:#F0EEF8;
+  --muted:#8884A0;
+  --faint:#3D3B52;
+  --accent:#7C5CFC;
+  --accent2:#5B8EFC;
+  --accent3:#FC5C8E;
+  --glow:rgba(124,92,252,0.15);
+  --sans:'Space Grotesk',system-ui,sans-serif;
+  --mono:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:16px;line-height:1.7;overflow-x:hidden}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--faint);border-radius:4px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;background:rgba(10,10,15,0.85);backdrop-filter:blur(16px);border-bottom:0.5px solid var(--border)}
+.nav-logo{font-family:var(--mono);font-size:1rem;color:var(--text);text-decoration:none;letter-spacing:0.05em}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.82rem;color:var(--muted);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.nav-hamburger span{display:block;width:22px;height:1.5px;background:var(--text);border-radius:2px;transition:all 0.3s}
+.nav-hamburger.active span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+.nav-hamburger.active span:nth-child(2){opacity:0}
+.nav-hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+.nav-mobile{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
+.nav-mobile.open{display:flex}
+.nav-mobile a{font-family:var(--mono);font-size:1.5rem;color:var(--text);text-decoration:none;letter-spacing:0.05em;transition:color 0.2s}
+.nav-mobile a:hover{color:var(--accent)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:8rem 3rem 4rem;position:relative;overflow:hidden}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-glow{position:absolute;top:20%;left:30%;width:600px;height:600px;background:radial-gradient(circle,rgba(124,92,252,0.12) 0%,transparent 70%);pointer-events:none}
+.hero-glow2{position:absolute;top:40%;right:10%;width:400px;height:400px;background:radial-gradient(circle,rgba(91,142,252,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-content{position:relative;z-index:1;max-width:780px}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.72rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:2rem;padding:0.4rem 1rem;border:0.5px solid rgba(124,92,252,0.3);border-radius:100px;background:rgba(124,92,252,0.06)}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.hero h1{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:700;line-height:1.05;margin-bottom:0.2em;letter-spacing:-0.02em}
+.hero h1 .name{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 .dim{color:var(--muted);font-weight:300}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:520px;margin:1.5rem 0 2.5rem;line-height:1.8}
+.hero-sub strong{color:var(--text)}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{padding:0.85rem 2rem;background:var(--accent);color:white;border:none;border-radius:6px;font-family:var(--sans);font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;letter-spacing:0.02em}
+.btn-primary:hover{background:#6a4de8;transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,92,252,0.3)}
+.btn-outline{padding:0.85rem 2rem;background:transparent;color:var(--text);border:0.5px solid var(--border2);border-radius:6px;font-family:var(--sans);font-size:0.9rem;cursor:pointer;text-decoration:none;transition:all 0.2s}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.hero-scroll{position:absolute;bottom:2.5rem;left:3rem;display:flex;align-items:center;gap:0.75rem;font-family:var(--mono);font-size:0.7rem;color:var(--faint);letter-spacing:0.1em;text-transform:uppercase;z-index:1}
+.scroll-line{width:40px;height:0.5px;background:var(--faint)}
+
+/* SECTIONS */
+section{padding:6rem 3rem}
+.section-label{font-family:var(--mono);font-size:0.7rem;font-weight:400;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem}
+.section-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;line-height:1.1;margin-bottom:3rem;letter-spacing:-0.02em}
+
+/* ABOUT */
+.about{background:var(--bg2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;max-width:1000px}
+.about-text{font-size:1rem;color:var(--muted);line-height:1.85}
+.about-text p+p{margin-top:1.25rem}
+.about-text strong{color:var(--text)}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.stat-card{padding:1.5rem;border:0.5px solid var(--border);border-radius:12px;background:var(--surface);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.stat-num{font-family:var(--mono);font-size:2.2rem;color:var(--accent);line-height:1;margin-bottom:0.4rem;font-weight:700}
+.stat-label{font-size:0.8rem;color:var(--muted);line-height:1.4}
+
+/* SKILLS */
+.skills{background:var(--bg)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;max-width:1000px}
+.skill-card{padding:1.75rem;border:0.5px solid var(--border);border-radius:12px;background:var(--surface);transition:all 0.3s;cursor:default;position:relative;overflow:hidden}
+.skill-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(124,92,252,0.08),transparent 60%);opacity:0;transition:opacity 0.3s}
+.skill-card:hover{border-color:rgba(124,92,252,0.4);transform:translateY(-4px)}
+.skill-card:hover::after{opacity:1}
+.skill-icon{font-size:1.75rem;margin-bottom:1rem}
+.skill-name{font-weight:600;font-size:1rem;margin-bottom:0.5rem;color:var(--text)}
+.skill-desc{font-size:0.85rem;color:var(--muted);line-height:1.6}
+.skill-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem}
+.tag{font-family:var(--mono);font-size:0.68rem;padding:0.2rem 0.6rem;background:rgba(124,92,252,0.1);color:var(--accent);border-radius:4px;border:0.5px solid rgba(124,92,252,0.2)}
+
+/* PROJECTS */
+.projects{background:var(--bg2)}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:1000px}
+.project-card{border:0.5px solid var(--border);border-radius:12px;overflow:hidden;transition:all 0.3s;background:var(--surface)}
+.project-card:hover{transform:translateY(-5px);border-color:rgba(124,92,252,0.3);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
+.project-thumb{height:160px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden}
+.thumb-1{background:linear-gradient(135deg,#1a1030,#2d1f60)}
+.thumb-2{background:linear-gradient(135deg,#0f1f30,#1f3a60)}
+.thumb-3{background:linear-gradient(135deg,#1f0f20,#5c1f60)}
+.thumb-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(124,92,252,0.2),transparent 70%)}
+.project-info{padding:1.5rem}
+.project-cat{font-family:var(--mono);font-size:0.68rem;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem}
+.project-name{font-weight:600;font-size:1.15rem;line-height:1.25;margin-bottom:0.6rem;color:var(--text)}
+.project-desc{font-size:0.85rem;color:var(--muted);line-height:1.6}
+
+/* CONTACT */
+.contact{background:var(--bg)}
+.contact-inner{max-width:600px}
+.contact-intro{font-size:1rem;color:var(--muted);margin-bottom:2.5rem;line-height:1.85}
+.contact-links{display:flex;flex-direction:column;gap:0.85rem}
+.contact-link{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.5rem;border:0.5px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);background:var(--surface);transition:all 0.2s}
+.contact-link:hover{border-color:rgba(124,92,252,0.4);transform:translateX(6px);background:var(--bg3)}
+.cl-left{display:flex;align-items:center;gap:1rem}
+.cl-icon{font-size:1.1rem;width:36px;height:36px;border-radius:8px;background:rgba(124,92,252,0.1);display:flex;align-items:center;justify-content:center}
+.cl-label{font-weight:500;font-size:0.92rem;color:var(--text)}
+.cl-sub{font-size:0.78rem;color:var(--muted);margin-top:1px}
+.cl-arrow{color:var(--faint);font-size:1rem;transition:color 0.2s}
+.contact-link:hover .cl-arrow{color:var(--accent)}
+
+footer{padding:2rem 3rem;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:0.72rem;color:var(--faint)}
+
+/* FADE IN */
+.fade-in{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ===================== CHATBOT ===================== */
+#chat-btn{position:fixed;bottom:1.5rem;right:1.5rem;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:pointer;z-index:999;display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 4px 20px rgba(124,92,252,0.5);transition:all 0.3s;animation:chatFloat 3s ease-in-out infinite}
+#chat-btn:hover{animation:none;transform:scale(1.1);box-shadow:0 8px 32px rgba(124,92,252,0.6)}
+@keyframes chatFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:#FC5C8E;border:2px solid var(--bg);animation:pulseDot 2s infinite}
+@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
+
+#chat-window{position:fixed;bottom:5.5rem;right:1.5rem;width:380px;height:560px;background:var(--bg2);border-radius:16px;border:0.5px solid var(--border2);box-shadow:0 24px 64px rgba(0,0,0,0.6),0 0 0 0.5px rgba(124,92,252,0.2);display:flex;flex-direction:column;overflow:hidden;z-index:1000;transform-origin:bottom right;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s;transform:scale(0) translateY(20px);opacity:0;pointer-events:none}
+#chat-window.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+
+.chat-header{background:linear-gradient(135deg,#1a1030,#1e1840);padding:0.85rem 1.1rem;display:flex;align-items:center;gap:0.75rem;border-bottom:0.5px solid var(--border)}
+.chat-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.chat-header-info{flex:1;min-width:0}
+.chat-header-name{font-weight:600;font-size:0.88rem;color:var(--text)}
+.chat-header-sub{font-family:var(--mono);font-size:0.65rem;color:var(--muted);display:flex;align-items:center;gap:4px;margin-top:1px}
+.online-dot{width:5px;height:5px;border-radius:50%;background:#4ADE80;animation:blink 2s infinite}
+.chat-header-actions{display:flex;align-items:center;gap:0.4rem;flex-shrink:0}
+.chat-icon-btn{background:rgba(255,255,255,0.05);border:0.5px solid var(--border);border-radius:8px;width:28px;height:28px;color:var(--muted);cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;font-family:var(--sans)}
+.chat-icon-btn:hover{background:rgba(255,255,255,0.1);color:var(--text)}
+.chat-icon-btn.danger:hover{background:rgba(252,92,142,0.15);color:#FC5C8E;border-color:rgba(252,92,142,0.3)}
+
+.chat-tabs{display:flex;border-bottom:0.5px solid var(--border);background:var(--bg2)}
+.chat-tab{flex:1;padding:0.55rem;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent}
+.chat-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.chat-tab:hover:not(.active){color:var(--text)}
+
+.chat-panel{display:none;flex:1;flex-direction:column;overflow:hidden}
+.chat-panel.active{display:flex}
+
+.chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.6rem;background:var(--bg)}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--faint);border-radius:3px}
+
+.msg-group{display:flex;flex-direction:column;gap:0.2rem}
+.msg-group.user{align-items:flex-end}
+.msg-group.bot{align-items:flex-start}
+.msg-row{display:flex;gap:0.5rem;align-items:flex-end;max-width:92%}
+.msg-row.user{flex-direction:row-reverse}
+.msg-av{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0}
+.msg-bubble{padding:0.6rem 0.85rem;border-radius:14px;font-size:0.84rem;line-height:1.55;word-break:break-word}
+.msg-group.bot .msg-bubble{background:var(--surface);color:var(--text);border:0.5px solid var(--border);border-bottom-left-radius:3px}
+.msg-group.user .msg-bubble{background:linear-gradient(135deg,var(--accent),#6a4de8);color:white;border-bottom-right-radius:3px}
+.msg-time{font-family:var(--mono);font-size:0.6rem;color:var(--faint);padding:0 0.5rem;margin-top:2px}
+.msg-actions{display:flex;gap:0.3rem;padding:0 0.3rem;margin-top:3px;opacity:0;transition:opacity 0.2s}
+.msg-group:hover .msg-actions{opacity:1}
+.msg-action-btn{background:var(--surface);border:0.5px solid var(--border);border-radius:6px;padding:0.2rem 0.4rem;font-size:0.7rem;color:var(--muted);cursor:pointer;transition:all 0.15s;font-family:var(--sans)}
+.msg-action-btn:hover{background:var(--bg3);color:var(--text)}
+.msg-action-btn.rated{color:var(--accent);border-color:rgba(124,92,252,0.4)}
+.msg-action-btn.copied{color:#4ADE80;border-color:rgba(74,222,128,0.4)}
+
+.date-divider{display:flex;align-items:center;gap:0.75rem;margin:0.5rem 0;font-family:var(--mono);font-size:0.62rem;color:var(--faint);letter-spacing:0.08em;text-transform:uppercase}
+.date-divider::before,.date-divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
+
+.typing-bubble{display:flex;gap:4px;padding:0.6rem 0.85rem}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:0.4;animation:typeBounce 1.2s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typeBounce{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-6px);opacity:1}}
+
+.quick-suggestions{display:flex;flex-wrap:wrap;gap:0.35rem;padding:0.5rem 0.85rem;background:var(--bg2);border-top:0.5px solid var(--border)}
+.quick-btn{font-family:var(--mono);font-size:0.65rem;padding:0.28rem 0.6rem;border:0.5px solid rgba(124,92,252,0.3);border-radius:6px;background:rgba(124,92,252,0.06);color:var(--accent);cursor:pointer;transition:all 0.15s}
+.quick-btn:hover{background:rgba(124,92,252,0.15);transform:translateY(-1px)}
+
+.chat-input-area{padding:0.65rem 0.85rem;border-top:0.5px solid var(--border);background:var(--bg2)}
+.input-row{display:flex;gap:0.5rem;align-items:flex-end}
+#chat-input{flex:1;border:0.5px solid var(--border2);border-radius:10px;padding:0.55rem 0.8rem;font-family:var(--sans);font-size:0.84rem;color:var(--text);background:var(--bg);resize:none;outline:none;max-height:100px;transition:border-color 0.2s;line-height:1.5}
+#chat-input:focus{border-color:rgba(124,92,252,0.5)}
+#chat-input::placeholder{color:var(--faint)}
+.input-meta{display:flex;justify-content:space-between;align-items:center;margin-top:0.35rem;padding:0 0.2rem}
+.char-count{font-family:var(--mono);font-size:0.6rem;color:var(--faint)}
+.char-count.warn{color:#FC5C8E}
+.input-hint{font-family:var(--mono);font-size:0.6rem;color:var(--faint)}
+#chat-send{width:36px;height:36px;border:none;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;transition:all 0.2s}
+#chat-send:hover{transform:scale(1.08);box-shadow:0 4px 12px rgba(124,92,252,0.4)}
+#chat-send:disabled{opacity:0.4;cursor:not-allowed}
+
+.history-panel{flex:1;overflow-y:auto;padding:0.85rem;display:flex;flex-direction:column;gap:0.5rem;background:var(--bg)}
+.history-panel::-webkit-scrollbar{width:3px}
+.history-panel::-webkit-scrollbar-thumb{background:var(--faint);border-radius:3px}
+.history-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:0.75rem;color:var(--faint);font-family:var(--mono);font-size:0.72rem;letter-spacing:0.05em}
+.history-empty span{font-size:2rem}
+.history-item{padding:0.85rem 1rem;border:0.5px solid var(--border);border-radius:10px;background:var(--surface);cursor:pointer;transition:all 0.2s}
+.history-item:hover{border-color:rgba(124,92,252,0.3);background:var(--bg3)}
+.history-item-q{font-size:0.82rem;color:var(--text);font-weight:500;margin-bottom:0.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.history-item-a{font-size:0.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.history-item-time{font-family:var(--mono);font-size:0.6rem;color:var(--faint);margin-top:0.4rem}
+.history-item-rating{font-size:0.7rem;margin-top:0.25rem}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:1rem 1.25rem}
+  .nav-links{display:none}
+  .nav-hamburger{display:flex}
+  .hero{padding:6rem 1.25rem 3rem}
+  .hero h1{font-size:clamp(2.2rem,9vw,3rem)}
+  .hero-sub{font-size:0.95rem}
+  .hero-scroll{left:1.25rem;bottom:1.5rem}
+  section{padding:3.5rem 1.25rem}
+  .section-title{margin-bottom:2rem}
+  .about-grid{grid-template-columns:1fr;gap:2rem}
+  .about-stats{grid-template-columns:1fr 1fr;gap:0.75rem}
+  .stat-num{font-size:1.8rem}
+  .skills-grid{grid-template-columns:1fr}
+  .projects-grid{grid-template-columns:1fr}
+  .contact-inner{max-width:100%}
+  .cl-sub{font-size:0.72rem;word-break:break-all}
+  footer{padding:1.5rem 1.25rem;flex-direction:column;gap:0.5rem;text-align:center}
+  #chat-btn{bottom:1.25rem;right:1.25rem;width:52px;height:52px;font-size:1.2rem}
+  #chat-window{bottom:0;right:0;left:0;width:100%;height:88vh;border-radius:16px 16px 0 0;transform-origin:bottom center}
+}
+@media(max-width:400px){
+  .hero h1{font-size:2rem}
+  .about-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">sultan<span>.</span>dev</a>
+  <ul class="nav-links">
+    <li><a href="#about">Tentang</a></li>
+    <li><a href="#skills">Keahlian</a></li>
+    <li><a href="#projects">Proyek</a></li>
+    <li><a href="#contact">Kontak</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile" id="nav-mobile">
+  <a href="#about" onclick="closeMobileNav()">Tentang</a>
+  <a href="#skills" onclick="closeMobileNav()">Keahlian</a>
+  <a href="#projects" onclick="closeMobileNav()">Proyek</a>
+  <a href="#contact" onclick="closeMobileNav()">Kontak</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Tersedia untuk proyek baru</div>
+    <h1>
+      <span class="dim">Hai, saya</span><br>
+      <span class="name">Sultan Abdillah</span>
+    </h1>
+    <p class="hero-sub">Saya membangun <strong>AI Chatbot</strong> dan sistem <strong>Automation</strong> yang mengubah cara bisnis bekerja — lebih cepat, lebih cerdas, lebih efisien.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">Lihat Proyek</a>
+      <a href="#contact" class="btn-outline">Hubungi Saya</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="fade-in">
+    <p class="section-label">Perkenalan</p>
+    <h2 class="section-title">Tentang Saya</h2>
+  </div>
+  <div class="about-grid fade-in">
+    <div class="about-text">
+      <p>Saya <strong>Sultan Abdillah</strong>, seorang developer yang fokus di bidang <strong>AI Chatbot</strong> dan <strong>Automation</strong>. Saya membantu bisnis dan individu mengintegrasikan kecerdasan buatan ke dalam sistem mereka.</p>
+      <p>Dari chatbot layanan pelanggan yang cerdas hingga otomatisasi alur kerja yang kompleks — saya merancang solusi yang benar-benar bekerja dan memberikan dampak nyata.</p>
+      <p>Setiap project saya bangun dengan pendekatan yang sederhana: <strong>teknologi canggih, hasil yang praktis.</strong></p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card"><div class="stat-num">AI</div><div class="stat-label">Chatbot Development & Integration</div></div>
+      <div class="stat-card"><div class="stat-num">⚡</div><div class="stat-label">Automation & Workflow Specialist</div></div>
+      <div class="stat-card"><div class="stat-num">🌐</div><div class="stat-label">Web & API Development</div></div>
+      <div class="stat-card"><div class="stat-num">24h</div><div class="stat-label">Waktu respon rata-rata</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills" id="skills">
+  <div class="fade-in"><p class="section-label">Kemampuan</p><h2 class="section-title">Keahlian Utama</h2></div>
+  <div class="skills-grid">
+    <div class="skill-card fade-in">
+      <div class="skill-icon">🤖</div>
+      <div class="skill-name">AI Chatbot Development</div>
+      <div class="skill-desc">Membangun chatbot berbasis LLM yang cerdas, dapat dikustomisasi sepenuhnya, dan siap deploy ke website maupun platform lainnya.</div>
+      <div class="skill-tags"><span class="tag">Claude API</span><span class="tag">Groq</span><span class="tag">GPT</span><span class="tag">LangChain</span></div>
+    </div>
+    <div class="skill-card fade-in">
+      <div class="skill-icon">⚙️</div>
+      <div class="skill-name">Automation & Workflow</div>
+      <div class="skill-desc">Otomatisasi proses bisnis yang repetitif — dari notifikasi, pengolahan data, hingga integrasi antar platform secara otomatis.</div>
+      <div class="skill-tags"><span class="tag">Make</span><span class="tag">Zapier</span><span class="tag">Python</span><span class="tag">API</span></div>
+    </div>
+    <div class="skill-card fade-in">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">Web Development</div>
+      <div class="skill-desc">Membangun website modern, responsif, dan siap produksi — dari landing page hingga aplikasi web dengan integrasi AI.</div>
+      <div class="skill-tags"><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">Vercel</span></div>
+    </div>
+    <div class="skill-card fade-in">
+      <div class="skill-icon">🔗</div>
+      <div class="skill-name">API Integration</div>
+      <div class="skill-desc">Menghubungkan berbagai layanan dan platform melalui API — membuat sistem yang saling terhubung dan bekerja otomatis.</div>
+      <div class="skill-tags"><span class="tag">REST API</span><span class="tag">Webhook</span><span class="tag">JSON</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="fade-in"><p class="section-label">Karya</p><h2 class="section-title">Proyek Unggulan</h2></div>
+  <div class="projects-grid">
+    <div class="project-card fade-in">
+      <div class="project-thumb thumb-1"><div class="thumb-glow"></div>🤖</div>
+      <div class="project-info">
+        <div class="project-cat">AI Chatbot</div>
+        <div class="project-name">Portfolio Chatbot dengan AI</div>
+        <div class="project-desc">Chatbot cerdas berbasis LLM yang terintegrasi langsung di website portfolio — menjawab pertanyaan pengunjung secara real-time.</div>
+      </div>
+    </div>
+    <div class="project-card fade-in">
+      <div class="project-thumb thumb-2"><div class="thumb-glow"></div>⚡</div>
+      <div class="project-info">
+        <div class="project-cat">Automation</div>
+        <div class="project-name">Workflow Automation System</div>
+        <div class="project-desc">Sistem otomatisasi alur kerja bisnis yang menghubungkan berbagai platform dan mengurangi pekerjaan manual secara signifikan.</div>
+      </div>
+    </div>
+    <div class="project-card fade-in">
+      <div class="project-thumb thumb-3"><div class="thumb-glow"></div>🌐</div>
+      <div class="project-info">
+        <div class="project-cat">Web + AI</div>
+        <div class="project-name">Website dengan Integrasi AI</div>
+        <div class="project-desc">Website modern yang dilengkapi dengan fitur AI — dari chatbot hingga analisis konten otomatis menggunakan API terkini.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="fade-in"><p class="section-label">Kontak</p><h2 class="section-title">Mari Berkolaborasi</h2></div>
+  <div class="contact-inner fade-in">
+    <p class="contact-intro">Punya ide project AI atau butuh solusi automation untuk bisnis kamu? Saya siap berdiskusi dan membantu mewujudkannya.</p>
+    <div class="contact-links">
+      <a href="https://wa.me/6289668237140" class="contact-link" target="_blank">
+        <div class="cl-left"><div class="cl-icon">💬</div><div><div class="cl-label">WhatsApp</div><div class="cl-sub">Hubungi langsung via WA</div></div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="mailto:abdillahsultan660@gmail.com" class="contact-link">
+        <div class="cl-left"><div class="cl-icon">✉️</div><div><div class="cl-label">Email</div><div class="cl-sub">Hubungi langsung via Email</div></div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="https://github.com/sultanprogamer-max" class="contact-link" target="_blank">
+        <div class="cl-left"><div class="cl-icon">🐙</div><div><div class="cl-label">GitHub</div><div class="cl-sub">Hubungi langsung via Github</div></div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Sultan Abdillah</span>
+  <span>AI & Automation Developer</span>
+</footer>
+
+<!-- CHATBOT BUTTON -->
+<button id="chat-btn" aria-label="Buka AI Assistant">
+  <div class="chat-pulse"></div>
+  🤖
+</button>
+
+<!-- CHAT WINDOW -->
+<div id="chat-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div>
+      <div class="chat-header-name">Kai — Asisten Sultan</div>
+      <div class="chat-header-sub"><div class="online-dot"></div> Online sekarang</div>
+    </div>
+    <button class="chat-close" id="chat-close">✕</button>
+  </div>
+
+  <div class="chat-messages" id="chat-messages">
+    <div class="msg bot">
+      <div class="msg-av">🤖</div>
+      <div class="msg-bubble">Halo! Saya Kai 👋 asisten AI Sultan. Lagi nyari solusi AI atau automation buat bisnis kamu? Cerita aja, saya siap bantu!</div>
+    </div>
+  </div>
+
+  <div class="quick-suggestions" id="quick-suggestions">
+    <button class="quick-btn" onclick="sendQuick('Apa saja layanan Sultan?')">💼 Layanan</button>
+    <button class="quick-btn" onclick="sendQuick('Bagaimana cara kerja chatbot AI?')">🤖 Chatbot AI</button>
+    <button class="quick-btn" onclick="sendQuick('Apa itu automation?')">⚡ Automation</button>
+    <button class="quick-btn" onclick="sendQuick('Bagaimana cara menghubungi Sultan?')">📩 Kontak</button>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea id="chat-input" placeholder="Tanya sesuatu..." rows="1"></textarea>
+    <button id="chat-send" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<script>
+let isOpen=false,isTyping=false,conversationHistory=[];
+
+document.getElementById('chat-btn').addEventListener('click',()=>{if(!isOpen)openChat();else closeChat()});
+document.getElementById('chat-close').addEventListener('click',closeChat);
+
+function openChat(){isOpen=true;document.getElementById('chat-window').classList.add('open');document.getElementById('chat-input').focus()}
+function closeChat(){isOpen=false;document.getElementById('chat-window').classList.remove('open')}
+
+function sendQuick(text){document.getElementById('chat-input').value=text;sendMessage()}
+
+document.getElementById('chat-input').addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}});
+
+async function sendMessage(){
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();
+  if(!text||isTyping)return;
+  input.value='';
+  appendMessage('user',text);
+  conversationHistory.push({role:'user',content:text});
+  document.getElementById('quick-suggestions').style.display='none';
+  showTyping();
+  document.getElementById('chat-send').disabled=true;
+  isTyping=true;
+  try{
+    const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:conversationHistory})});
+    const data=await response.json();
+    if(!response.ok)throw new Error(data.error||'Server error');
+    hideTyping();
+    appendMessage('bot',data.reply);
+    conversationHistory.push({role:'assistant',content:data.reply});
+  }catch(err){
+    hideTyping();
+    appendMessage('bot','Maaf, ada gangguan koneksi. Coba lagi ya! 🔄');
+    console.error(err);
+  }
+  isTyping=false;
+  document.getElementById('chat-send').disabled=false;
+  document.getElementById('chat-input').focus();
+}
+
+function appendMessage(role,text){
+  const messages=document.getElementById('chat-messages');
+  const div=document.createElement('div');
+  div.className=`msg ${role}`;
+  if(role==='bot'){div.innerHTML=`<div class="msg-av">🤖</div><div class="msg-bubble">${formatText(text)}</div>`}
+  else{div.innerHTML=`<div class="msg-bubble">${escapeHtml(text)}</div>`}
+  messages.appendChild(div);
+  messages.scrollTop=messages.scrollHeight;
+}
+
+function formatText(text){return escapeHtml(text).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}
+function escapeHtml(text){return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function showTyping(){
+  const messages=document.getElementById('chat-messages');
+  const div=document.createElement('div');
+  div.className='msg bot';div.id='typing-indicator';
+  div.innerHTML=`<div class="msg-av">🤖</div><div class="msg-bubble"><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  messages.appendChild(div);messages.scrollTop=messages.scrollHeight;
+}
+function hideTyping(){const el=document.getElementById('typing-indicator');if(el)el.remove()}
+
+document.getElementById('hamburger').addEventListener('click',()=>{
+  document.getElementById('hamburger').classList.toggle('active');
+  document.getElementById('nav-mobile').classList.toggle('open');
+});
+function closeMobileNav(){
+  document.getElementById('hamburger').classList.remove('active');
+  document.getElementById('nav-mobile').classList.remove('open');
+}
+
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>

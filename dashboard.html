@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Sultan Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A0F;--bg2:#111118;--surface:#1E1E2C;--border:#ffffff0f;--border2:#ffffff1a;
+  --text:#F0EEF8;--muted:#8884A0;--faint:#3D3B52;
+  --accent:#7C5CFC;--accent2:#5B8EFC;--green:#4ADE80;--red:#FC5C8E;--yellow:#F59E0B;
+  --sans:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999}
+.login-box{background:var(--surface);border:0.5px solid var(--border2);border-radius:16px;padding:2.5rem;width:340px;text-align:center}
+.login-logo{font-family:var(--mono);font-size:1rem;color:var(--accent);margin-bottom:0.5rem}
+.login-title{font-size:1.3rem;font-weight:700;margin-bottom:0.5rem}
+.login-sub{font-size:0.85rem;color:var(--muted);margin-bottom:2rem}
+.login-input{width:100%;padding:0.75rem 1rem;background:var(--bg);border:0.5px solid var(--border2);border-radius:10px;color:var(--text);font-family:var(--sans);font-size:0.9rem;outline:none;margin-bottom:1rem;transition:border-color 0.2s}
+.login-input:focus{border-color:var(--accent)}
+.login-btn{width:100%;padding:0.85rem;background:var(--accent);color:white;border:none;border-radius:10px;font-family:var(--sans);font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.login-btn:hover{background:#6a4de8;transform:translateY(-1px)}
+.login-error{color:var(--red);font-size:0.82rem;margin-top:0.75rem;display:none}
+
+/* DASHBOARD */
+#dashboard{display:none;padding:2rem}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.dash-title{font-family:var(--mono);font-size:1rem;color:var(--accent)}
+.dash-subtitle{font-size:1.5rem;font-weight:700}
+.dash-actions{display:flex;gap:0.75rem}
+.btn{padding:0.6rem 1.2rem;border-radius:8px;font-family:var(--sans);font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.2s;border:0.5px solid var(--border2);background:var(--surface);color:var(--text)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--accent);color:white;border-color:var(--accent)}
+.btn-primary:hover{background:#6a4de8;color:white}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:1.25rem;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.stat-label{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem}
+.stat-value{font-size:2rem;font-weight:700;color:var(--text);line-height:1}
+.stat-sub{font-size:0.75rem;color:var(--muted);margin-top:0.35rem}
+.stat-badge{display:inline-flex;align-items:center;gap:3px;font-size:0.7rem;padding:0.15rem 0.5rem;border-radius:100px;margin-top:0.4rem}
+.badge-green{background:rgba(74,222,128,0.1);color:var(--green)}
+.badge-red{background:rgba(252,92,142,0.1);color:var(--red)}
+.badge-yellow{background:rgba(245,158,11,0.1);color:var(--yellow)}
+
+/* GRID LAYOUT */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:1.25rem}
+.card-title{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem}
+.card.full{grid-column:1/-1}
+
+/* CHART */
+.chart-wrap{position:relative;height:180px}
+
+/* LEADS TABLE */
+.leads-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.leads-table th{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;padding:0.6rem 0.75rem;text-align:left;border-bottom:0.5px solid var(--border)}
+.leads-table td{padding:0.7rem 0.75rem;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
+.leads-table tr:hover td{background:rgba(124,92,252,0.04)}
+.leads-table tr:last-child td{border-bottom:none}
+.badge{display:inline-flex;align-items:center;padding:0.2rem 0.55rem;border-radius:100px;font-size:0.7rem;font-weight:500}
+.badge-sangat{background:rgba(74,222,128,0.12);color:var(--green)}
+.badge-tertarik{background:rgba(124,92,252,0.12);color:var(--accent)}
+.badge-netral{background:rgba(136,132,160,0.12);color:var(--muted)}
+.badge-cuma{background:rgba(245,158,11,0.12);color:var(--yellow)}
+.badge-ya{background:rgba(74,222,128,0.12);color:var(--green)}
+.badge-tidak{background:rgba(136,132,160,0.12);color:var(--muted)}
+
+/* TOP ITEMS */
+.top-item{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:0.5px solid var(--border)}
+.top-item:last-child{border-bottom:none}
+.top-item-label{font-size:0.85rem;color:var(--text)}
+.top-item-bar{flex:1;margin:0 1rem;height:4px;background:var(--faint);border-radius:4px;overflow:hidden}
+.top-item-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width 0.8s ease}
+.top-item-count{font-family:var(--mono);font-size:0.75rem;color:var(--muted)}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--muted);font-family:var(--mono);font-size:0.8rem;gap:0.5rem}
+.loading-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:loadBounce 1.2s ease-in-out infinite}
+.loading-dot:nth-child(2){animation-delay:0.2s}
+.loading-dot:nth-child(3){animation-delay:0.4s}
+@keyframes loadBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
+
+.empty{text-align:center;padding:2rem;color:var(--faint);font-family:var(--mono);font-size:0.78rem}
+
+/* ALERT */
+.alert-item{display:flex;align-items:flex-start;gap:0.75rem;padding:0.75rem;background:rgba(74,222,128,0.06);border:0.5px solid rgba(74,222,128,0.2);border-radius:8px;margin-bottom:0.5rem}
+.alert-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:4px;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.alert-text{font-size:0.82rem;color:var(--text)}
+.alert-time{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:2px}
+
+@media(max-width:768px){
+  #dashboard{padding:1rem}
+  .content-grid{grid-template-columns:1fr}
+  .card.full{grid-column:1}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .leads-table{font-size:0.75rem}
+  .leads-table th,.leads-table td{padding:0.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">sultan.dev</div>
+    <div class="login-title">Dashboard Analytics</div>
+    <div class="login-sub">Masuk untuk lihat data leads portfolio kamu</div>
+    <input type="password" class="login-input" id="password-input" placeholder="Masukkan password..." onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">Masuk →</button>
+    <div class="login-error" id="login-error">Password salah! Coba lagi.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">// analytics dashboard</div>
+      <div class="dash-subtitle">Sultan Portfolio Leads</div>
+    </div>
+    <div class="dash-actions">
+      <button class="btn" onclick="loadData()">↻ Refresh</button>
+      <button class="btn btn-primary" onclick="logout()">Keluar</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="loading"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
+  </div>
+
+  <!-- CHARTS + TOP -->
+  <div class="content-grid">
+    <div class="card">
+      <div class="card-title">// layanan diminati</div>
+      <div class="chart-wrap"><canvas id="layananChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">// top layanan</div>
+      <div id="top-layanan"><div class="loading"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="content-grid">
+    <div class="card">
+      <div class="card-title">// 🔥 leads panas (minta dihubungi)</div>
+      <div id="hot-leads"><div class="loading"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">// sentimen pengunjung</div>
+      <div class="chart-wrap"><canvas id="sentimenChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card full">
+    <div class="card-title">// semua leads</div>
+    <div id="leads-table-wrap"><div class="loading"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div>
+  </div>
+</div>
+
+<script>
+const DASHBOARD_PASSWORD = 'sultan2025';
+let layananChartInstance = null;
+let sentimenChartInstance = null;
+
+function login() {
+  const pw = document.getElementById('password-input').value;
+  if (pw === DASHBOARD_PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function logout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('password-input').value = '';
+}
+
+async function loadData() {
+  try {
+    const res = await fetch('/api/dashboard');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    renderDashboard(data);
+  } catch (err) {
+    console.error(err);
+    document.getElementById('stats-grid').innerHTML = `<div class="empty">Gagal load data: ${err.message}</div>`;
+  }
+}
+
+function renderDashboard(data) {
+  const { rows, stats } = data;
+
+  // STATS
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Total Leads</div>
+      <div class="stat-value">${stats.total}</div>
+      <div class="stat-sub">Semua pengunjung yang chat</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Leads Panas</div>
+      <div class="stat-value" style="color:var(--green)">${stats.hotLeads}</div>
+      <div class="stat-sub">Minta dihubungi</div>
+      <div class="stat-badge badge-green">↑ Prioritas tinggi</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Sangat Tertarik</div>
+      <div class="stat-value" style="color:var(--accent)">${stats.sangatTertarik}</div>
+      <div class="stat-sub">Sentimen terbaik</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Layanan Terpopuler</div>
+      <div class="stat-value" style="font-size:1.1rem;padding-top:0.5rem">${stats.topLayanan || '-'}</div>
+      <div class="stat-sub">Paling banyak diminati</div>
+    </div>
+  `;
+
+  // LAYANAN CHART
+  const layananCounts = {};
+  rows.forEach(r => { if (r.layanan && r.layanan !== '-') layananCounts[r.layanan] = (layananCounts[r.layanan] || 0) + 1; });
+  const layananLabels = Object.keys(layananCounts);
+  const layananValues = Object.values(layananCounts);
+
+  if (layananChartInstance) layananChartInstance.destroy();
+  const ctx1 = document.getElementById('layananChart').getContext('2d');
+  layananChartInstance = new Chart(ctx1, {
+    type: 'doughnut',
+    data: {
+      labels: layananLabels.length ? layananLabels : ['Belum ada data'],
+      datasets: [{ data: layananValues.length ? layananValues : [1], backgroundColor: ['#7C5CFC','#5B8EFC','#FC5C8E','#4ADE80','#F59E0B'], borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#8884A0', font: { size: 11 }, padding: 12 } } } }
+  });
+
+  // TOP LAYANAN
+  const sorted = Object.entries(layananCounts).sort((a,b) => b[1]-a[1]);
+  const maxVal = sorted[0]?.[1] || 1;
+  document.getElementById('top-layanan').innerHTML = sorted.length ? sorted.map(([label, count]) => `
+    <div class="top-item">
+      <div class="top-item-label">${label}</div>
+      <div class="top-item-bar"><div class="top-item-fill" style="width:${(count/maxVal*100)}%"></div></div>
+      <div class="top-item-count">${count}x</div>
+    </div>`).join('') : '<div class="empty">Belum ada data</div>';
+
+  // HOT LEADS
+  const hot = rows.filter(r => r.minta_dihubungi === 'Ya').slice(0, 5);
+  document.getElementById('hot-leads').innerHTML = hot.length ? hot.map(r => `
+    <div class="alert-item">
+      <div class="alert-dot"></div>
+      <div>
+        <div class="alert-text"><strong>${r.nama || 'Anonim'}</strong> — ${r.layanan || 'Tidak spesifik'}</div>
+        <div class="alert-time">${r.waktu} ${r.budget && r.budget !== '-' ? '· Budget: '+r.budget : ''}</div>
+      </div>
+    </div>`).join('') : '<div class="empty">Belum ada leads panas</div>';
+
+  // SENTIMEN CHART
+  const sentimenCounts = { 'Sangat Tertarik': 0, 'Tertarik': 0, 'Netral': 0, 'Cuma Tanya-tanya': 0 };
+  rows.forEach(r => { if (r.sentimen && sentimenCounts[r.sentimen] !== undefined) sentimenCounts[r.sentimen]++; });
+
+  if (sentimenChartInstance) sentimenChartInstance.destroy();
+  const ctx2 = document.getElementById('sentimenChart').getContext('2d');
+  sentimenChartInstance = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(sentimenCounts),
+      datasets: [{ data: Object.values(sentimenCounts), backgroundColor: ['#4ADE80','#7C5CFC','#8884A0','#F59E0B'], borderRadius: 6, borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#8884A0', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#8884A0', stepSize: 1 }, grid: { color: '#ffffff0a' } } } }
+  });
+
+  // LEADS TABLE
+  document.getElementById('leads-table-wrap').innerHTML = rows.length ? `
+    <div style="overflow-x:auto">
+    <table class="leads-table">
+      <thead><tr>
+        <th>Waktu</th><th>Nama</th><th>Layanan</th><th>Budget</th><th>Dihubungi</th><th>Sentimen</th><th>Pesan</th>
+      </tr></thead>
+      <tbody>${rows.slice().reverse().map(r => `
+        <tr>
+          <td style="font-family:var(--mono);font-size:0.72rem;color:var(--muted)">${r.waktu}</td>
+          <td>${r.nama || '<span style="color:var(--faint)">-</span>'}</td>
+          <td>${r.layanan || '<span style="color:var(--faint)">-</span>'}</td>
+          <td style="font-family:var(--mono);font-size:0.75rem">${r.budget || '-'}</td>
+          <td><span class="badge ${r.minta_dihubungi==='Ya'?'badge-ya':'badge-tidak'}">${r.minta_dihubungi || 'Tidak'}</span></td>
+          <td><span class="badge ${getSentimenClass(r.sentimen)}">${r.sentimen || 'Netral'}</span></td>
+          <td style="color:var(--muted);font-size:0.78rem;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.pesan_pertama || '-'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>` : '<div class="empty">Belum ada data leads</div>';
+}
+
+function getSentimenClass(s) {
+  if (s === 'Sangat Tertarik') return 'badge-sangat';
+  if (s === 'Tertarik') return 'badge-tertarik';
+  if (s === 'Cuma Tanya-tanya') return 'badge-cuma';
+  return 'badge-netral';
+}
+</script>
+</body>
+</html>
